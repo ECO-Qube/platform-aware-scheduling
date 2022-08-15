@@ -70,6 +70,15 @@ data:
       name:
         matches: ^node_(.*)
       metricsQuery: <<.Series>>
+    - seriesQuery: '{__name__="cpu_diff_target"}'
+      resources:
+        overrides:
+          instance:
+            resource: node
+      name:
+        matches: ^cpu_(.*)_target
+      # metricsQuery: node_cpu_diff - 100 + 100 * avg by (instance, job) (rate(node_cpu_seconds_total{mode="idle"}[1m]))
+      metricsQuery: avg by (instance) (label_replace(cpu_diff_target, "instance", "$1", "exported_instance", "(.*)")) - 100 + 100 * avg by (instance) (rate(node_cpu_seconds_total{mode="idle"}[1m]))
     - seriesQuery: '{namespace!="",__name__!~"^container_.*"}'
       seriesFilters: []
       resources:

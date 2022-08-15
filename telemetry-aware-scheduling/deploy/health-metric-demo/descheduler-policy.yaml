@@ -6,3 +6,7 @@ strategies:
     params:
       nodeAffinityType:
         - "requiredDuringSchedulingIgnoredDuringExecution"
+      namespaces:
+        include:
+        - "default"
+      nodeFit: false
